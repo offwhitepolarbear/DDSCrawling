@@ -6,7 +6,9 @@ import org.springframework.stereotype.Service;
 import com.kihwangkwon.common.GetHTMLByJsoup;
 @Service
 public class GameApi {
+	
 	String urlHead = "https://dds-4cda3.firebaseapp.com/";
+	
 	public Document getGameInfo(String gameId) {
 		String url = urlHead+"Game"+gameId+".html";
 		return GetHTMLByJsoup.getDocument(url);

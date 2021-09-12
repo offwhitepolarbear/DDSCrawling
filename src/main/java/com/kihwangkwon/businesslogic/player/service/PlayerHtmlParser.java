@@ -211,31 +211,25 @@ public class PlayerHtmlParser {
 	private PlayerStat getPlayerAdvancedStat(PlayerStat playerStat, Element advancedStatRaw) {
 		Elements stats = advancedStatRaw.select("tr > td");
 
-		double onCourtMargin = Double.valueOf(stats.get(2).text());
-		double offCourtMargin = Double.valueOf(stats.get(3).text());
-		double netMargin = Double.valueOf(stats.get(4).text());
-
+		double onCourtMargin = getDoubleFromText(stats.get(2).text());
+		double offCourtMargin = getDoubleFromText(stats.get(3).text());
+		double netMargin = getDoubleFromText(stats.get(4).text());
 		
-		//per 예외처리 N/A 인 애들이 있음
-		String perString = stats.get(5).text();
-		double per = 0;
-		if (!perString.equals("N/A")) {
-			per = Double.valueOf(stats.get(5).text());
-		}
+		double per = getDoubleFromText(stats.get(5).text());
 		
-		double trueShootingPercentage = Double.valueOf(stats.get(6).text());
-		double effectiveFieldGoalPercentage = Double.valueOf(stats.get(7).text());
+		double trueShootingPercentage = getDoubleFromText(stats.get(6).text());
+		double effectiveFieldGoalPercentage = getDoubleFromText(stats.get(7).text());
 
-		double offensiveReboundPercentage = Double.valueOf(stats.get(8).text());
-		double defensiveReboundPercentage = Double.valueOf(stats.get(9).text());
-		double totalReboundPercentage = Double.valueOf(stats.get(10).text());;
-		double assistPercentage = Double.valueOf(stats.get(11).text());
-		double stealPercentage = Double.valueOf(stats.get(12).text());
-		double blockPercentage = Double.valueOf(stats.get(13).text());
+		double offensiveReboundPercentage = getDoubleFromText(stats.get(8).text());
+		double defensiveReboundPercentage = getDoubleFromText(stats.get(9).text());
+		double totalReboundPercentage = getDoubleFromText(stats.get(10).text());;
+		double assistPercentage = getDoubleFromText(stats.get(11).text());
+		double stealPercentage = getDoubleFromText(stats.get(12).text());
+		double blockPercentage = getDoubleFromText(stats.get(13).text());
 
-		double turnoverPercentage = Double.valueOf(stats.get(14).text());
-		double assistTurnoverRatio = Double.valueOf(stats.get(15).text());
-		double usagePercentage = Double.valueOf(stats.get(16).text());
+		double turnoverPercentage = getDoubleFromText(stats.get(14).text());
+		double assistTurnoverRatio = getDoubleFromText(stats.get(15).text());
+		double usagePercentage = getDoubleFromText(stats.get(16).text());
 		
 		playerStat.setOnCourtMargin(onCourtMargin);
 		playerStat.setOffCourtMargin(offCourtMargin);
@@ -272,18 +266,18 @@ public class PlayerHtmlParser {
 	private PlayerStat getPlayerMiscellaneousStat(PlayerStat playerStat, Element miscellaneousStat) {
 		Elements stats = miscellaneousStat.select("tr > td");
 		
-		 double drivesStopped = Double.valueOf(stats.get(2).text());
-		 double drivesFaced = Double.valueOf(stats.get(3).text());
-		 double drivesStoppedPercentage = Double.valueOf(stats.get(4).text());
-		 double turnoversForced = Double.valueOf(stats.get(5).text());
-		 double pointsAllowed = Double.valueOf(stats.get(6).text());
-		 double shotsFaced = Double.valueOf(stats.get(7).text());
-		 double pointsAllowedPerShotsFaced = Double.valueOf(stats.get(8).text());
-		 double touches = Double.valueOf(stats.get(9).text());
-		 double turnoversPerTouches = Double.valueOf(stats.get(10).text());
-		 double assistsPerTouches = Double.valueOf(stats.get(11).text());
-		 double chargesTaken = Double.valueOf(stats.get(12).text());
-		 double technicalFouls = Double.valueOf(stats.get(13).text());
+		 double drivesStopped = getDoubleFromText(stats.get(2).text());
+		 double drivesFaced = getDoubleFromText(stats.get(3).text());
+		 double drivesStoppedPercentage = getDoubleFromText(stats.get(4).text());
+		 double turnoversForced = getDoubleFromText(stats.get(5).text());
+		 double pointsAllowed = getDoubleFromText(stats.get(6).text());
+		 double shotsFaced = getDoubleFromText(stats.get(7).text());
+		 double pointsAllowedPerShotsFaced = getDoubleFromText(stats.get(8).text());
+		 double touches = getDoubleFromText(stats.get(9).text());
+		 double turnoversPerTouches = getDoubleFromText(stats.get(10).text());
+		 double assistsPerTouches = getDoubleFromText(stats.get(11).text());
+		 double chargesTaken = getDoubleFromText(stats.get(12).text());
+		 double technicalFouls = getDoubleFromText(stats.get(13).text());
 		
 		 playerStat.setDrivesStopped(drivesStopped);
 		 playerStat.setDrivesFaced(drivesFaced);
@@ -302,6 +296,17 @@ public class PlayerHtmlParser {
 		 playerStat.setTechnicalFouls(technicalFouls);
 
 		 return playerStat;
+	}
+	
+	private Double getDoubleFromText(String text) {
+		double result = 0 ;
+		
+		if(!text.equals("NaN") && !text.equals("N/A")) {
+			result = Double.valueOf(text);
+		}
+		
+		return result;
+
 	}
 	
 	public List<PlayerRating> getPlayerRatingList(TeamURLTag teamTag){

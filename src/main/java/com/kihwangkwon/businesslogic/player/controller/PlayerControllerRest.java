@@ -12,6 +12,11 @@ public class PlayerControllerRest {
 	
 	private PlayerService playerService;
 
+	private int lastVersion = 20210901;
+	private int newVersion = 20210902;
+	private int thisWeek = 2;
+	
+	
 	@Autowired
 	public PlayerControllerRest(PlayerService playerService) {
 		this.playerService = playerService;
@@ -21,18 +26,24 @@ public class PlayerControllerRest {
 	@RequestMapping("/index")
 	public void getPlayerId() {
 		//정상작동 작동방지
-		//playerService.getPlayerIndex();
+		playerService.getPlayerIndex();
 	}
 	
 	@RequestMapping("/stat/team")
 	public void getPlayerStatFromTeam() {
 		//정상작동 작동방지
-		//playerService.getPlayerStatFromTeam();
+		playerService.getPlayerStatFromTeam();
 	}
 	
 	@RequestMapping("/rating/team")
 	public void getPlayerRating() {
 		//정상작동 작동방지
-		//playerService.getPlayerRatingListFromTeam();
+		playerService.getPlayerRatingListFromTeam();
+	}
+	
+	@RequestMapping("/weekly/stat")
+	public void getWeeklyStat() {
+		//정상작동 작동방지
+		playerService.savePlayerStatWeeklyAll(lastVersion,newVersion,thisWeek);
 	}
 }

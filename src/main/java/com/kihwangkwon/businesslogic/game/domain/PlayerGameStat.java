@@ -35,6 +35,7 @@ public class PlayerGameStat {
 	boolean starter;
 	String playerId;
 	String playerName;
+	String position;
 	int min;
 	int fieldGoalMade;
 	int fieldGoalAttempt;
@@ -64,6 +65,7 @@ public class PlayerGameStat {
 							, boolean starter
 							, String playerId
 							, String playerName
+							, String position
 							, int min
 							, int fieldGoalMade
 							, int fieldGoalAttempt
@@ -91,6 +93,7 @@ public class PlayerGameStat {
 		this.starter = starter;
 		this.playerId = playerId;
 		this.playerName = playerName;
+		this.position = position;
 		this.min = min;
 		this.fieldGoalMade = fieldGoalMade;
 		this.fieldGoalAttempt = fieldGoalAttempt;
