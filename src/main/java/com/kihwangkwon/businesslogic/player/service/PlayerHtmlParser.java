@@ -4,29 +4,37 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kihwangkwon.apidata.player.PlayerApi;
 import com.kihwangkwon.businesslogic.player.domain.PlayerRating;
 import com.kihwangkwon.businesslogic.player.domain.PlayerStat;
-import com.kihwangkwon.businesslogic.team.domain.TeamTag;
 import com.kihwangkwon.businesslogic.team.domain.TeamURLTag;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Service
 public class PlayerHtmlParser {
-	private PlayerApi playerApi;
+	private final PlayerApi playerApi;
 	
-	@Autowired
-	PlayerHtmlParser(PlayerApi playerApi){
-		this.playerApi = playerApi;
+//	@Autowired
+//	PlayerHtmlParser(PlayerApi playerApi){
+//		this.playerApi = playerApi;
+//	}
+	
+	public List<PlayerStat> getPlayerStatFromTeamPageHtmlString(String htmlString) {
+		  Document document = Jsoup.parse(htmlString);
+		  List<PlayerStat> playerStatList = documentToPlayersStat(document);
+			return playerStatList;
 	}
 	
-	public List<PlayerStat> getPlayerStatFromTeamPage(TeamURLTag teamTag) {
-		Document document = playerApi.getPlayerStatByTeamPage(teamTag.toString());
+	public List<PlayerStat> getPlayerStatFromTeamPage(String teamTag) {
+		Document document = playerApi.getPlayerStatByTeamPage(teamTag);
 		List<PlayerStat> playerStatList = documentToPlayersStat(document);
 		return playerStatList;
 	}

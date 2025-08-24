@@ -4,10 +4,11 @@ import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
 
 import com.kihwangkwon.common.GetHTMLByJsoup;
+import com.kihwangkwon.common.domain.BaseUrl;
 @Service
 public class GameApi {
 	
-	String urlHead = "https://dds-4cda3.firebaseapp.com/";
+	String urlHead = BaseUrl.baseUrl;
 	
 	public Document getGameInfo(String gameId) {
 		String url = urlHead+"Game"+gameId+".html";

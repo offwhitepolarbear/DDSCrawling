@@ -24,10 +24,11 @@ public class PlayerStat {
 	
 	int version;
 	
+	String teamName;
 	String playerId;
 	String playerName;
 	String position;
-
+	
 	int gamePlay;
 	int gameStart;
 	double min;

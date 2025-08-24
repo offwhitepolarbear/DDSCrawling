@@ -4,10 +4,11 @@ import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
 
 import com.kihwangkwon.common.GetHTMLByJsoup;
+import com.kihwangkwon.common.domain.BaseUrl;
 
 @Service
 public class PlayerApi {
-	String urlHead = "https://dds-4cda3.firebaseapp.com/";
+	String urlHead = BaseUrl.baseUrl;
 	
 	public Document getPlayerIndex() {
 		String url = urlHead + "PlayerIndex.html";
@@ -15,6 +16,10 @@ public class PlayerApi {
 	}
 	
 	public Document getPlayerStatByTeamPage(String teamName) {
+//		if(teamName.equals("PORTrailBlazers")) {
+//			teamName = "PORTrail_Blazers"; 
+//				
+//		}
 		String url = urlHead+teamName+"_Stats.html";
 		return GetHTMLByJsoup.getDocument(url);
 	}

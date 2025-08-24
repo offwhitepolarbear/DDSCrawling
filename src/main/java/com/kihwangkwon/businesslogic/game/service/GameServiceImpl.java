@@ -2,13 +2,11 @@ package com.kihwangkwon.businesslogic.game.service;
 
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,18 +40,19 @@ public class GameServiceImpl implements GameService {
 	}
 	
 	@Override
-	public void getGame(String gameId) {
+	public void getGame(String gameId, int version) {
 		List<TeamStat> homeAndAway= htmlParserGame.getGame(gameId);
 		
 		//홈팀 저장
-		saveTeamStat(homeAndAway.get(0));
+		saveTeamStat(homeAndAway.get(0), version);
 		//원정팀 저장
-		saveTeamStat(homeAndAway.get(1));
+		saveTeamStat(homeAndAway.get(1), version);
 	
 	}
 	
-	private void saveTeamStat(TeamStat teamStat) {
+	private void saveTeamStat(TeamStat teamStat, int version) {
 		//팀 스탯 저장
+		setVersionToTeamStat(teamStat, version);
 		teamGameStatRepository.save(teamStat.getTeamGameStat());
 		
 		//돌면서 플레이어 스탯 저장
@@ -63,6 +62,13 @@ public class GameServiceImpl implements GameService {
 		
 	}
 	
+	private void setVersionToTeamStat(TeamStat teamStat, int version) {
+		TeamGameStat teamGameStat = teamStat.getTeamGameStat();
+		teamGameStat.setVersion(version);
+		List<PlayerGameStat> playerGameStatList = teamStat.getPlayerGameStatList();
+		playerGameStatList.forEach(playerGameStat -> playerGameStat.setVersion(version));
+	}
+	
 
 	@Override
 	public void getGameIds(int version) {
@@ -70,6 +76,9 @@ public class GameServiceImpl implements GameService {
 
 		for(TeamURLTag teamTag:all) {
 			String teamName = teamTag.toString();
+			if(teamName.equals("PORTrail_Blazers")) {
+				teamName = "PORTrailBlazers";
+			}
 			Document document = gameApi.getGameList(teamName);
 			List idList = getGameIdList(document);
 			saveGameIds(idList, version);
@@ -89,7 +98,6 @@ public class GameServiceImpl implements GameService {
 	}
 	
 	private void saveGameIds(List<Integer> idList, int version){
-		
 		for(int id: idList) {
 			GameId dbGameId = gameIdRepository.findByVersionAndGameId(version, id);
 			if(dbGameId==null) {
@@ -102,16 +110,13 @@ public class GameServiceImpl implements GameService {
 		
 	}
 	
-	private List selectAllGameId(int version) {
+	private List<GameId> selectAllGameId(int version) {
 		return gameIdRepository.findByVersionOrderByGameIdAsc(version);
 	}
 
 	@Override
 	public void getAllGameData(int version) {
 		List<GameId> gameIdList = selectAllGameId(version);
-		for(GameId gameId : gameIdList) {
-			String gameIdString = String.valueOf(gameId.getGameId());
-			getGame(gameIdString);
-		}
+		gameIdList.stream().parallel().forEach((GameId gameId)-> getGame(String.valueOf(gameId.getGameId()), version));
 	}
 }
